@@ -5,12 +5,9 @@ RUN apt-get -y update && \
     apt-get autoremove -y && \
     apt-get clean
 ENV LANG en_US.utf8
-COPY pyproject.toml /server/
-#COPY pyproject.toml poetry.lock /server/
+COPY pyproject.toml poetry.lock /server/
 RUN pip install -U pip &&\
     pip install --no-cache-dir poetry && \
-    poetry lock && \
     poetry config virtualenvs.create false && \
     poetry install && \
-    rm pyproject.toml
-# poetry.lock
+    rm pyproject.toml poetry.lock
