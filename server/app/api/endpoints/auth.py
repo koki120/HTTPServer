@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.schema import auth
+from app.domain.entities import auth
 
 router = APIRouter()
 
