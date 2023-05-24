@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  fastapi:
+    ports:
+      - 8000:8000
+    build: ./server
+    # ./serverにあるDockerfileを使用して、イメージをビルドする。
+    restart: always
+    volumes:
+      - ./server:/server
+    environment:
+      TZ: Asia/Tokyo
+    command: >
+      bash -c "uvicorn app.main:app --reload --host 0.0.0.0"
