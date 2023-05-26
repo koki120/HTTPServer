@@ -1,16 +1,30 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from app.config.config import settings
-from app.domain.entities.user import UserInDB
 from jose import JWTError, jwt
 from app.usecases.user import UserUsecase
 from app.domain.entities.user import User
+
+from app.drivers.rdb.base import SessionLocal
+from sqlalchemy import text
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/auth/access-token/"
 )
 
 uu = UserUsecase()
+
+
+
+session = SessionLocal()
+
+# # # 接続を確認するために、データベースのバージョン情報を取得します
+query = text("SELECT VERSION()")
+result = session.execute(query)
+# print("データベースのバージョン:", result[0])
+# # # セッションをクローズします
+# session.close()
+# print("接続確認が成功しました")
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:

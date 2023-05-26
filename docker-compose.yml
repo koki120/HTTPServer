@@ -1,6 +1,28 @@
-version: '3'
+version: '3.9'
 
 services:
+  mysql:
+    image: mysql:8.0.33
+    # M1 Macの人はplatformのコメント外す
+    # platform: linux/x86_64
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      # 永続化するときにマウントするディレクトリ
+      - ./mysql/mysql_data:/var/lib/mysql
+      - ./mysql/mysql_conf/:/etc/mysql/conf.d
+    environment:
+      MYSQL_DATABASE: dev
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test
+      TZ: Asia/Tokyo
+    command: >
+      mysqld --explicit_defaults_for_timestamp=true
+      --default-authentication-plugin=mysql_native_password
+    # 認証プラグインの初期設定
+
   fastapi:
     ports:
       - 8000:8000
@@ -13,3 +35,5 @@ services:
       TZ: Asia/Tokyo
     command: >
       bash -c "uvicorn app.main:app --reload --host 0.0.0.0"
+    depends_on:
+      - mysql
