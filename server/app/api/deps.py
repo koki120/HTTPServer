@@ -15,16 +15,15 @@ oauth2_scheme = OAuth2PasswordBearer(
 uu = UserUsecase()
 
 
-
 session = SessionLocal()
 
 # # # 接続を確認するために、データベースのバージョン情報を取得します
 query = text("SELECT VERSION()")
 result = session.execute(query)
-# print("データベースのバージョン:", result[0])
+print("データベースのバージョン👺:", result.fetchone()[0])
 # # # セッションをクローズします
-# session.close()
-# print("接続確認が成功しました")
+session.close()
+print("接続確認が成功しました")
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
